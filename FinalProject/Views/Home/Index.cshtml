@@ -1,0 +1,679 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    System.Data.DataView data = ViewBag.adra;
+    System.Data.DataView data1 = ViewBag.Country;
+    System.Data.DataView data2 = ViewBag.Item;
+    
+}
+
+    <div class="text-center">
+        <form class="row g-3" method="post" id="submitBtn" asp-controller="Student" asp-action="add">
+            <div class="col-md-6">
+                <label for="inputName4" class="form-label">Warehouse Name</label>
+                <input type="text" class="form-control" id="inputName4" placeholder="Warehouse Name" name="Name" />
+            </div>
+            <div class="col-md-6">
+                <label for="Warehouse_Type" class="form-label">Warehouse Type</label>
+                <select class="form-control" name="Type" id="Warehouse_Type">
+                    <option selected hidden>Choose...</option>
+                    <option>Major Warehouse</option>
+                    <option>Electronic Warehouse</option>
+                    <option>Insurance Warehouse</option>
+                </select>
+            </div>
+            <div class="col-6">
+                <label for="inputAddress" class="form-label">Address</label>
+                <input type="text" class="form-control" id="inputAddress" name="Address" />
+            </div>
+            <div class="col-md-6">
+                <label for="inputCity" class="form-label">City</label>
+                <select class="form-control" name="City" id="City">
+                    <option selected hidden>Choose...</option>
+
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="inputState" class="form-label">State</label>
+                <select class="form-control" name="State" id="State">
+                    <option selected hidden>Choose...</option>
+
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Countries</label>
+                <select class="form-control" id="dropdown">
+                    <option selected hidden>Choose</option>
+                    @if (data1 != null)
+                    {
+                        @foreach (System.Data.DataRowView rowView in data1)
+                        {
+                            System.Data.DataRow row = rowView.Row;
+                            <option data-id='@row["COUNTRY_ID"]'>@row["COUNTRY_NAME"]</option>
+                        }
+                    }
+
+                </select>
+
+            </div>
+            <div class="col-6">
+                <label for="inputAddress" class="form-label">Telephone</label>
+                <input type="number" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" class="form-control" id="inputTelephone" maxlength="9" name="Tele" />
+            </div>
+            <div class="col-6" style="margin-top: 35px;">
+
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="Virtual" name="Virtual" value="1" />
+                    <label class="form-check-label" for="Virtual">Virtual Warehouse</label>
+                </div>
+            </div>
+            <div class="col-12" style="margin-top:20px; margin-bottom:10px;">
+                <input type="button" value="Cancel" class="btn btn-danger" id="cancel" />
+                <input type="button" value="Submit" class="btn btn-primary AddIcon" id="adra" />
+
+            </div>
+        </form>
+        <table class="table table-active" id="datatable">
+            <thead class="table-dark">
+                <tr>
+                    <th>Warehouse Name</th>
+                    <th>Warehouse Type</th>
+                    <th>Address</th>
+                    <th>Country</th>
+                    <th>State</th>
+                    <th>City</th>
+                    <th>Telephone</th>
+                    <th>Virtual Warehouse</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (data != null)
+                {
+                    @foreach (System.Data.DataRowView rowView in data)
+                    {
+                        System.Data.DataRow row = rowView.Row;
+                        string x = row["VIRTUAL_WAREHOUSE"].ToString();
+                        int v = Int32.Parse(x);
+                <tr data-id='@row["WAREHOUSE_ID"]'>
+                    <td>@row["WAREHOUSE_NAME"]</td>
+                    <td>@row["WAREHOUSE_TYPE"]</td>
+                    <td>@row["WAREHOUSE_ADDRESS"]</td>
+                    <td>@row["COUNTRY_NAME"]</td>
+                    <td>@row["STATE_NAME"]</td>
+                    <td>@row["CITY_NAME"]</td>
+                    <td>@row["TELEPHONE"]</td>
+                    @if (v == 0)
+                    {
+                        <td>No</td>
+                    }
+                    else
+                    {
+                        <td>Yes</td>
+                    }
+                    <td class="text-center sorting col-1"><i class="fa fa-close deleteIcon" style="cursor:pointer" ; data-id='@row["WAREHOUSE_ID"]' data-name=''></i><i class="fa fa-edit EditIcon" style="cursor:pointer" ; data-id='@row["WAREHOUSE_ID"]' id="Edit" data-name='@row["Warehouse_Name"]' data-type='@row["WAREHOUSE_TYPE"]' data-address='@row["WAREHOUSE_ADDRESS"]' data-country='@row["COUNTRY_NAME"]' data-state='@row["STATE_NAME"]' data-city='@row["CITY_NAME"]' data-telephone='@row["TELEPHONE"]' data-virtual='@row["VIRTUAL_WAREHOUSE"]'></i> <i class="fas fa-plus showCategory" style="cursor:pointer" ; data-id='@row["WAREHOUSE_ID"]' action="/Home/Privacy"></i><i class="fas fa-shopping-cart buy" style="cursor:pointer" ; data-id='@row["WAREHOUSE_ID"]' data-toggle="modal" data-target="#myModal"></i></td>
+                </tr>
+                    }
+                }
+            </tbody>
+        </table>
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog modal-lg">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Modal Header</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="row g-3" method="post">
+                            <div class="col-md-6">
+                                <label for="inputName4" class="form-label">Item Name</label>
+                                <input type="text" class="form-control" id="inputItemName4" placeholder="Item Name" name="Name" />
+                            </div>
+                            
+                            <div class="col-6">
+                                <label for="Type" class="form-label">Item Type</label>
+                                <select class="form-control" id="Type">
+                                    <option selected hidden>Choose...</option>
+                                    <option value="1">Electronic</option>
+                                    <option value="2">Default</option>
+                                    <option value="3">Insurance</option>
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <label for="inputName4" class="form-label">Price</label>
+                                <input type="number" min="1" oninput="javascript: if (this.value < this.min) this.value=this.min" class="form-control" id="inputPrice4" placeholder="Price" name="Name" />
+                            </div>
+                            <div class="col-12" style="margin-top:20px; margin-bottom:10px;">
+                                <input type="button" value="Submit" class="btn btn-primary AddItem" id="Add" />
+                            </div>
+                        </form>
+                        <table class="table table-light" id="price">
+                            <thead class="table-dark">
+                                <tr>
+                                    <td>Item Name</td>
+                                    <td>Price/Unit</td>
+                                    <td>Add To Cart</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (data2 != null)
+                                {
+                                    @foreach (System.Data.DataRowView rowView in data2)
+                                    {
+                                        System.Data.DataRow row = rowView.Row;
+                                        <tr>
+                                            <td>@row["CATEGORY_NAME"]</td>
+                                            <td>@row["PRICE"]</td>
+                                            <td><input type="radio" name="Cart" id="Cart" data-id='@row["CATEGORY_ID"]' data-name='@row["CATEGORY_NAME"]' data-price='@row["PRICE"]' /></td>
+
+                                        </tr>
+                                    }
+                                }
+
+                            </tbody>
+                        </table>
+                        <table class="table table-light" id="priceTable">
+                            <thead class="table-dark">
+                            <th>Item Name</th>
+                            <th>Price/Unit</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+                            <th>Actions</th>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <input type="text" disabled id="total" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" id="purchase">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+        @section Scripts {
+            @{await Html.RenderPartialAsync("_ValidationScriptsPartial");
+                <script>
+                    var flag = 0;
+                    var flagR = 0;
+                        var virt = 0;
+                    var id = 0;
+                    //var datalist
+                    $(document).on("click", "#Add", function () {
+                        var name = $("#inputItemName4").val();
+                     //   var ware_Name = $("#inputWareName").val();
+                        var type = $("#Type").find(":selected").val();
+                        var price = $("#inputPrice4").val();
+                       var id = $("#price > tbody > tr").find("td:eq(0)").attr('data-id');
+                       // var id = 0;
+                        var form = new FormData();
+                        form.append("name", name);
+                        form.append("type", type);
+                        form.append("id", id);
+                        form.append("price", price);
+                        $.ajax({
+                            type: "POST",
+                            url: "/Home/addItem",
+                            processData: false,
+                            contentType: false,
+                            data: form
+
+
+
+                            ,
+                            success: function (data) {
+                                getCategories(id);
+                               // $("#price").empty();
+                         //       $.each(data, function (i, data11) {
+                           //         row = '<tr><td>' + data11.CATEGORY_NAME + '</td><td>' + data11.PRICE + '</td><td><input type="radio" name="Cart" class="Cart" data-cat=' + data11.CATEGORY_ID + ' data-id=' + data11.WAREHOUSE_ID + ' data-name=' + data11.CATEGORY_NAME + ' data-price=' + data11.PRICE + ' /></td>'
+
+
+                             //       $("#price tbody").append(row);
+                                   // getPurchase(data11.CATEGORY_ID);
+                              //  });
+                            },
+                            error: function (xhr, ajaxOptions, thrownError) {
+                                alert(xhr.status);
+                                alert(thrownError);
+                            }
+                        });
+                    });
+                    $(document).on("click", "#purchase", function () {
+                        var purchase=[];
+                        $("#priceTable > tbody > tr").each(function () {
+                            var id = $(this).attr('id');
+                            var y = $(this).find("td:eq(0)").attr('data-name');
+                            var z = $(this).find("td:eq(1)").attr('data-price');
+                            var b = $(this).find("td:eq(2)").children().val();
+                            var x = $(this).find("td:eq(3)").children().val();
+                            purchase.push({ name: y, category: id, price: z, quantity: b, total: x });
+                        });
+                        console.log(purchase);
+                        $.ajax({
+                            type: "POST",
+                            url: "Home/GetPurchases",
+                            data: JSON.stringify(purchase),
+                            dataType: "json",
+                            contentType: 'application/json; charset=utf-8',
+                            //Content-Type: application / json,
+                            success: function (data) {
+                                alert("Saved");
+                            },
+                            error: function (xhr, ajaxOptions, thrownError) {
+                                alert(xhr.status);
+                                alert(thrownError);
+                            }
+                        });
+                    });
+                        $(document).on("change", "#Virtual", function () {
+                            if ($("input[type=checkbox]").prop("checked")) {
+                                virt = 1;
+                            } else {
+                                virt = 0;
+                            }
+                            console.log(virt);
+                        });
+                    $(document).on("change", "#dropdown", function () {
+                        var data = $("#dropdown").find(":selected").attr('data-id');
+                        //alert(data);
+                        $.ajax({
+                            type: "GET",
+                            url: "/Home/GetStates",
+                            data: {
+                                id: data
+                            },
+                            success: function (data) {
+                                $("#State").empty();
+                                option = '<option selected hidden>Choose...</option>'
+                                $("#State").append(option);
+                                $.each(data, function (i, data2) {
+                                    option = '<option id='+data2.STATE_ID+'>' + data2.STATE_NAME + '</option>'
+                                    $("#State").append(option);
+                                });
+                            },
+                            error: function (xhr, ajaxOptions, thrownError) {
+                                alert(xhr.status);
+                                alert(thrownError);
+                            }
+                        });
+                    });
+                    $(document).on("change", "#State", function () {
+                        var data = $("#State").find(":selected").attr('id');
+                       // alert(data);
+                        $.ajax({
+                            type: "GET",
+                            url: "/Home/GetCities",
+                            data: {
+                                id: data
+                            },
+                            success: function (data) {
+                                $("#City").empty();
+                                option = '<option selected hidden>Choose...</option>'
+                                $("#City").append(option);
+
+                                $.each(data, function (i, data2) {
+                                    option = '<option id='+data2.CITY_ID+'>' + data2.CITY_NAME + '</option>'
+                                    $("#City").append(option);
+                                });
+                            },
+                            error: function (xhr, ajaxOptions, thrownError) {
+                                alert(xhr.status);
+                                alert(thrownError);
+                            }
+                        });
+                    });
+                        $(document).on("click", "#adra", function () {
+
+                                var data1 = $("#inputName4").val();
+                                var fr = document.getElementById("submitBtn");
+                                var form = new FormData(fr);
+                                var data3 = $("#Warehouse_Type").find(":selected").text();
+                                var data4 = $("#inputAddress");
+                                var data5 = $("#City").find(":selected").attr('id');
+                                var data6 = $("#State").find(":selected").attr('id');
+                                var data7 = $("#dropdown").find(":selected").attr('data-id');
+                                var data8 = $("#inputTelephone").val();
+                                // var data9 = $("#Default").val();
+                                var data10 = $("#Virtual").val();
+                                var data11 = $("tr").attr('data-id');
+                                alert(data7);
+                                alert(data6);
+                                alert(data5);
+                                var Warehouse = {
+                                    Name: data1, City: data5, State: data6, Country: data7, Telephone: data8, address: data4, Warehouse_Type: data3, Virtual: data10
+                                }
+                                var form = document.getElementById("submitBtn");
+
+                              //  console.log(Warehouse);
+                            var x = new FormData();
+                            x.append("ID", id);
+                                x.append("Name", $("#inputName4").val());
+                            x.append("Type", $("#Warehouse_Type").find(":selected").text());
+                            x.append("Address", $("#inputAddress").val());
+                                x.append("City", $("#City").find(":selected").attr('id'));
+                                x.append("State", $("#State").find(":selected").attr('id'));
+                                x.append("Country", $("#dropdown").find(":selected").attr('data-id'));
+                                x.append("Telephone", $("#inputTelephone").val());
+                            x.append("Virtual", virt);
+                            if (flag == 0) {
+                                $.ajax({
+                                    type: "POST",
+                                    url: "/Home/add",
+                                    processData: false,
+                                    contentType: false,
+                                    data: x
+
+
+
+                                    ,
+                                    success: function (data) {
+                                        getData();
+                                    },
+                                    error: function (xhr, ajaxOptions, thrownError) {
+                                        alert(xhr.status);
+                                        alert(thrownError);
+                                    }
+                                });
+                            } else {
+                                $.ajax({
+                                    type: "POST",
+                                    url: "/Home/Update",
+                                    processData: false,
+                                    contentType: false,
+                                    data: x
+
+
+
+                                    ,
+                                    success: function (data) {
+                                        flag = 0;
+                                        getData();
+                                    },
+                                    error: function (xhr, ajaxOptions, thrownError) {
+                                        alert(xhr.status);
+                                        alert(thrownError);
+                                    }
+                                });
+                            }
+                            });
+
+                        $(document).on("click", ".EditIcon", function () {
+                            var STD_ID = $(this).attr('data-id');
+                            id = STD_ID;
+
+                            var Name = $(this).attr('data-name');
+                            var Type = $(this).attr('data-type');
+                            var address = $(this).attr('data-address');
+                            var country = $(this).attr('data-country');
+                            var state = $(this).attr('data-state');
+                            var city = $(this).attr('data-city');
+                            var telephone = $(this).attr('data-telephone');
+                            var virtual = $(this).attr('data-virtual');
+                            flag = 1;
+                            //alert(STD_ID);
+                            //alert(Name);
+                            document.getElementById("Warehouse_Type").value = Type;
+
+                            //$("#inputID4").prop("readonly", true);
+                            document.getElementById("inputName4").value = Name;
+                            document.getElementById("inputAddress").value = address;
+                            document.getElementById("City").value = city;
+                            document.getElementById("State").value = state;
+                            document.getElementById("dropdown").value = country;
+                            document.getElementById("inputTelephone").value = telephone;
+                            document.getElementById("Virtual").value = virtual;
+                        });
+                        $(document).on("click", ".showCategory", function () {
+                            var USERID = $(this).attr('data-id');
+
+                            $.ajax({
+                                type: "POST",
+                                url: "/Home/Privacy",
+                                data: {
+                                    ID: USERID
+                                },
+                                success: function (data) {
+                                    // alert("1");
+                                    //$("#" + USERID).css("background-color", "red");
+                                    //  getData();
+                                    window.location.href = "/Home/Privacy?ID=" + USERID;
+                                }
+                                ,
+                                error: function (xhr, ajaxOptions, thrownError) {
+                                    alert(xhr.status);
+                                    alert(thrownError);
+                                }
+                            });
+                        });
+                        $(document).on("click", "#cancel", function () {
+                            $("#inputName4").val(null);
+                            $("#inputAddress").val(null);
+                            $("#Warehouse_Type").val(null);
+                            $("#inputAddress");
+                            $("#City").val(null);
+                            $("#State").val(null);
+                            $("#dropdown").val(null);
+                            $("#inputTelephone").val(null);
+                        });
+                    $(document).on("click", ".buy", function () {
+                        
+                            var USERID = $(this).attr('data-id');
+                            console.log(USERID);
+                            $.ajax({
+                                type: "POST",
+                                url: "/Home/GetCategory",
+                                data: {
+                                    ID: USERID
+                                },
+                                success: function (data) {
+                                    $.each(data, function (i, data11) {
+                                        row = '<tr><td data-id=' + data11.WAREHOUSE_ID + '>' + data11.CATEGORY_NAME + '</td><td>' + data11.PRICE + '</td><td><input type="radio" name="Cart" class="Cart" data-cat=' + data11.CATEGORY_ID + ' data-id=' + data11.WAREHOUSE_ID + ' data-name=' + data11.CATEGORY_NAME + ' data-price=' + data11.PRICE + ' /></td>'
+
+
+                                        $("#price tbody").append(row);
+                                        getPurchase(data11.CATEGORY_ID);
+                                    });
+                                    //getPurchase(data11.CATEGORY_ID);
+                                }
+                                ,
+                                error: function (xhr, ajaxOptions, thrownError) {
+                                    alert(xhr.status);
+                                    alert(thrownError);
+                                }
+                            });
+                        });
+                        $(document).on("click", ".deleteIcon", function () {
+                            var USERID = $(this).attr('data-id');
+
+                            $.ajax({
+                                type: "DELETE",
+                                url: "/Home/DeleteUser",
+                                data: {
+                                    USER_ID: USERID
+                                },
+                                success: function (data) {
+                                    console.log(data);
+                                    if (data == "-1") {
+                                        alert("You can`t delete a warehouse that has items");
+                                    } else {
+                                        alert("Deleted");
+                                    // alert("1");
+                                    //$("#" + USERID).css("background-color", "red");
+                                    getData();
+                                }
+                                }
+                                ,
+                                error: function (xhr, ajaxOptions, thrownError) {
+                                    alert(xhr.status);
+                                    alert(thrownError);
+                                }
+                            });
+                        });
+                    $(document).on("click", ".delete", function () {
+                        var USERID = $(this).attr('data-id');
+                        var id = $(this).attr('data-cate');
+                        $.ajax({
+                            type: "DELETE",
+                            url: "/Home/DeletePurchase",
+                            data: {
+                                ID: USERID
+                            },
+                            success: function (data) {
+                                console.log(data);
+                              //  if (data == "-1") {
+                                  //  alert("You can`t delete a warehouse that has items");
+                                //} else {
+                                    alert("Deleted");
+                                    // alert("1");
+                                    //$("#" + USERID).css("background-color", "red");
+                                getPurchase(id);
+                                //}
+                            }
+                            ,
+                            error: function (xhr, ajaxOptions, thrownError) {
+                                alert(xhr.status);
+                                alert(thrownError);
+                            }
+                        });
+                    });
+                    $(document).on("keyup", ".quantity", function () {
+                        var x = parseInt($(this).val());
+                        var y = $(this).attr('data-name');
+                        var z = parseInt($(this).attr('data-price'));
+                        var b = x * z;
+                        var sum = 0;
+                        console.log(z);
+                        console.log(b);
+                        $(this).closest($("tr")).find("td:eq(3)").children("input[type=text]").val(b);
+                        $("#priceTable > tbody >tr").each(function () {
+                            var a = parseInt($(this).find("td:eq(3)").children("input[type=text]").val());
+                            sum = parseInt(sum + a);
+                            
+                        });
+                        $("#total").val(sum);
+                      // var a= $("#total").val();
+                       // $("#total").val(a+b);
+                        
+                    });
+                   /* $(document).on("ready", "#priceTable", function () {
+                        var x = parseInt($("#priceTable > tbody >tr").find("td:eq(3)").children("input[type=text]").val());
+                        var sum = 0; 
+                        $("#priceTable > tbody >tr").each(function () {
+                            var a = parseInt($(this).find("td:eq(3)").children("input[type=text]").val());
+                            sum = parseInt(sum + a);
+
+                        });
+                        $("total").val(sum);
+                    })*/
+                    $(document).on("click", "input[type=radio]", function () {
+                        var USERID = $(this).attr('data-id');
+                        var catID = $(this).attr('data-cat');
+                        var name = $(this).attr('data-name');
+                        var price = $(this).attr('data-price');
+                        if (!$("#" + catID).length) {
+                            
+                            alert(USERID);
+                            $.ajax({
+                                type: "POST",
+                                url: "/Home/GetCategory" @*@Url.Action("SaveUser", "Users") *@,
+                                data: {
+                                    ID: USERID
+                                },
+                                success: function (data) {
+                                     $("#priceTable tbody").empty();
+                                    console.log($(this).attr('data-name'));
+                                    row = '<tr id='+catID+' ><td data-name='+name+' >' + name + '</td><td data-price='+price+' >' + price + '</td><td><input type="text" class="quantity" id=' + name + ' data-name=' + name + ' data-price=' + price + '  /></td><td><input type="text" disabled id=' + $(this).attr('data-name') + ' /></td></tr>'
+
+
+                                    $("#priceTable tbody").append(row);
+                                    //$(this).prop('checked', false);
+                                    /*   $("#datatable").dataTable();*/
+
+                                },
+                                error: function (xhr, ajaxOptions, thrownError) {
+                                    alert(xhr.status);
+                                    alert(thrownError);
+                                }
+                            });
+                        }
+                    });
+                    function getCategories(id) {
+                        $.ajax({
+                            type: "POST",
+                            url: "/Home/GetCategory" @*@Url.Action("SaveUser", "Users") *@,
+                            data: { ID: id },
+                        success: function (data) {
+                            $("#price tbody").empty();
+                            $.each(data, function (i, data11) {
+                                row = '<tr><td data-id=' + data11.WAREHOUSE_ID + '>' + data11.CATEGORY_NAME + '</td><td>' + data11.PRICE + '</td><td><input type="radio" name="Cart" class="Cart" data-cat=' + data11.CATEGORY_ID + ' data-id=' + data11.WAREHOUSE_ID + ' data-name=' + data11.CATEGORY_NAME + ' data-price=' + data11.PRICE + ' /></td>'
+
+
+                                $("#price tbody").append(row);
+                              //  getPurchase(data11.CATEGORY_ID);
+                            });
+                            /*   $("#datatable").dataTable();*/
+
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            alert(xhr.status);
+                            alert(thrownError);
+                        }
+                        });
+                    }
+                    function getPurchase(id) {
+                        $.ajax({
+                            type: "POST",
+                            url: "/Home/GetPurchase",
+                            data: {
+                                ID:id
+                            },
+                            success: function (data) {
+                                console.log(data);
+                                var sum = 0;
+                                if (data != null) {
+                                    //$("#priceTable").empty();
+                                    $.each(data, function (i, data11) {
+                                        row = '<tr id=' + data11.CATEGORY_ID + ' ><td data-name=' + data11.ITEM_NAME + ' >' + data11.ITEM_NAME + '</td><td data-price=' + data11.PRICE + ' >' + data11.PRICE + '</td><td><input type="text" class="quantity" id=' + data11.CATEGORY_NAME + ' data-name=' + data11.CATEGORY_NAME + ' data-price=' + data11.PRICE + ' value=' + data11.QUANTITY + ' /></td><td><input type="text" disabled id=' + data11.TOTALPRICE + ' value=' + data11.TOTALPRICE + ' /></td><td><i class="fa fa-close delete" style="cursor:pointer"; data-cate=' + data11.CATEGORY_ID + ' data-id=' + data11.PURCHASE_ID + '></i></td></tr>'
+                                        $("#priceTable tbody").append(row);
+                                        sum = sum + data11.TOTALPRICE;
+                                    });
+                                    
+                                    $("#total").val(sum);
+                                }
+                            }
+                        });
+                    }
+                    function getData() {
+
+                $.ajax({
+                    type: "GET",
+                    url: "/Home/GetWarehouses" @*@Url.Action("SaveUser", "Users") *@,
+                    success: function (data) {
+                        $("#datatable tbody").empty();
+                        $.each(data, function (i, data11) {
+                            row = '<tr><td class="text-center sorting">' + data11.WAREHOUSE_NAME + '</td> <td class="text-center sorting">' + data11.WAREHOUSE_TYPE + '</td><td class="text-center sorting">' + data11.WAREHOUSE_ADDRESS + '</td><td class="text-center sorting">' + data11.COUNTRY_NAME + '</td><td class="text-center sorting">' + data11.STATE_NAME + '</td><td class="text-center sorting">' + data11.CITY_NAME + '</td><td class="text-center sorting">' + data11.TELEPHONE + '</td><td class="text-center sorting">' + data11.VIRTUAL_WAREHOUSE + '</td><td class="text-center sorting"><i class="fa fa-close deleteIcon" style="cursor:pointer"; data-id=' + data11.WAREHOUSE_ID + '></i><i class="fa fa-edit EditIcon" style="cursor:pointer" ; data-id='+data11.WAREHOUSE_ID+' id="Edit" data-name='+data11.Warehouse_Name+' data-type='+data11.WAREHOUSE_TYPE+' data-address='+data11.WAREHOUSE_ADDRESS+' data-country='+data11.COUNTRY_NAME+' data-state='+data11.STATE_NAME+' data-city='+data11.CITY_NAME+' data-telephone='+data11.TELEPHONE+' data-virtual='+data11.VIRTUAL_WAREHOUSE+'></i><i class="fas fa-plus showCategory" style="cursor:pointer" ; data-id='+data11.WAREHOUSE_ID+' action="/Home/Privacy"></i></td></tr>'
+                        // datatable+='</tbody></table>';
+
+
+                        $("#datatable tbody").append(row);
+                    });
+                    /*   $("#datatable").dataTable();*/
+
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert(xhr.status);
+                    alert(thrownError);
+                }
+            });
+            }
+                </script>
+                }
+        }
+
+

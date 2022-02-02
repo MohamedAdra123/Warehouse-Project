@@ -1,0 +1,37 @@
+﻿@{
+    ViewData["Title"] = "Privacy Policy";
+    System.Data.DataView data = ViewBag.Cat;
+}
+    <input type="button" class="btn btn-secondary" name />
+    <table class="table table-active" id="datatable">
+        <thead class="table-dark">
+            <tr>
+                <th>Category Name</th>
+                <th>Category Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (data != null)
+            {
+                @foreach (System.Data.DataRowView rowView in data)
+                {
+                    System.Data.DataRow row = rowView.Row;
+            <tr>
+                <td>@row["CATEGORY_NAME"]</td>
+                @if (row["CATEGORY_TYPE"].Equals("0"))
+                {
+                    <td>Electronic</td>
+                }
+                else if (row["CATEGORY_TYPE"].Equals("1"))
+                {
+                    <td>Packages</td>
+                }
+                else
+                {
+                    <td>Insurance</td>
+                }
+            </tr>
+                }
+            }
+        </tbody>
+    </table>

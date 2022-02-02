@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Project1</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body class="bg-light">
+    <header>
+        <nav class="nav nav-fill nav-pills">
+            <div class="container">
+                <ul class="nav nav-fill nav-pills bg-secondary">
+                    <li class="nav-item">
+                        <label class="btn btn-secondary btn-lg" for="btnCheck1">Home</label>
+                    </li>
+
+                    <li class="nav-item">
+                        <label class="btn btn-secondary btn-lg" for="btnCheck2">About Us</label>
+                    </li>
+                    <li class="nav-item">
+                        <label class="btn btn-secondary btn-lg" for="btnCheck3">Search</label>
+                    </li>
+                </ul>
+            </div>
+
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2021 - Project - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://kit.fontawesome.com/2707682d88.js" crossorigin="anonymous"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
+
